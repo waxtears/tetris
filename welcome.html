@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>dzj的俄罗斯方块</title>
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+    <div id="screen">
+        <div id="navigation">
+            <div id="begin">
+                <div class="firstWord">游戏开始</div>
+                <div class="secondWord">暂停游戏</div>
+            </div>
+            <div id="set">
+                <div class="firstWord">游戏设置</div>
+                <div id="mode">
+                    <div class="firstWord">单人模式</div>
+                    <div id="single">单人模式</div>
+                    <div id="double">双人模式</div>
+                </div>
+                <div id="speed">
+                    <div class="firstWord">游戏速度</div>
+                    <div id="speedVal"><span>< </span> <i>5</i> <span> ></span></div>
+                </div>
+            </div>
+            <div id="record">
+                <div class="firstWord">游戏记录</div>
+                <div class="secondWord">分数: <span>0</span></div>
+            </div>
+        </div>
+        <div id="game">
+            <div class="firstWord">欢迎来玩俄罗斯方块</div>
+            <div class="secondWord"></div>
+        </div>
+    </div>
+    <div id="background"></div>
+    <div id="recordList">
+        <div class="x">x</div>
+        <div id="list"></div>
+    </div>
+    <div id="scoreSubmit">
+        <div class="word">请输入你的名字</div>
+        <div class="input"><input value="player"><br><span> </span></div>
+        <div class="button">submit</div>
+    </div>
+    <script src="../jquery-3.4.1.min.js"></script>
+    <script src="global.js"></script>
+    <script src="draw.js"></script>
+    <script src="game.js"></script>
+    <script src="control.js"></script>
+</body>
+</html>
