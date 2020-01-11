@@ -3,26 +3,34 @@ function checkControl() {
     return gameStatus === 'begin' && curBlock != null;
 }
 
+//左右尝试
+function adaptBorder(block) {
+    if (!touchBorder(block['blocks'], COLS)) return block;
+
+    block = getBlock(block.type, block.status, block.blocks[1].x - 1, block.blocks[1].y);
+    if (!touchBorder(block['blocks'], COLS)) return block;
+    block = getBlock(block.type, block.status, block.blocks[1].x + 2, block.blocks[1].y);
+    if (!touchBorder(block['blocks'], COLS)) return block;
+
+    if (block.type === 0) {
+        block = getBlock(block.type, block.status, block.blocks[1].x - 3, block.blocks[1].y);
+        if (!touchBorder(block['blocks'], COLS)) return block;
+    }
+    return null;
+}
+
 //旋转方块
 function rotateBlock(block) {
     if (!checkControl())
         return;
 
-    let temp = getBlock(block.type, block.status + 1, block.blocks[1].x, block.blocks[1].y);
-    if (touchLand(temp.blocks, board, ROWS)) return block;
-    if (!touchBorder(temp['blocks'], COLS)) return temp;
+    let temp = adaptBorder(getBlock(block.type, block.status + 1, block.blocks[1].x, block.blocks[1].y));
+    if (!temp)
+        return block;
 
-    temp = getBlock(temp.type, temp.status, temp.blocks[1].x - 1, temp.blocks[1].y);
-    if (!touchBorder(temp['blocks'], COLS)) return temp;
-    temp = getBlock(temp.type, temp.status, temp.blocks[1].x + 2, temp.blocks[1].y);
-    if (!touchBorder(temp['blocks'], COLS)) return temp;
-
-    if (temp.type === 0) {
-        temp = getBlock(temp.type, temp.status, temp.blocks[1].x - 3, temp.blocks[1].y);
-        if (!touchBorder(temp['blocks'], COLS)) return temp;
-    }
-
-    return block;
+    if (touchLand(temp.blocks, board, ROWS))
+        return block;
+    return temp;
 }
 
 //移动方块
