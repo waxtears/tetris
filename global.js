@@ -1,8 +1,10 @@
 //初始化全局变量
-var SIDELEN = 42;
+var OFFSETX = 0;
+var OFFSETY = 0;
+var SIDELEN = 0;
 var BORDERWID = 1;
 var COLS = 13;
-var ROWS = 17;
+var ROWS = 20;
 var board = null;
 var curBlock = null;
 var gameStatus = 'wait';
@@ -17,9 +19,11 @@ var saveBlock = null;
 var saveBoard = null;
 
 $(function () {
+    adaptAllSize();
+    $('.firstWord').show();
     //导航栏
     //开始暂停键
-    let selector = $('#begin');
+    selector = $('#begin');
     selector.mouseenter(function () {
         $(this).addClass('fontBold');
     });
@@ -123,11 +127,18 @@ $(function () {
         }
         $(this).siblings('i').text(i);
     });
+
+    //浏览器调整大小
+    $(window).resize(function () {
+        adaptAllSize();
+        board = initBoard();
+    });
+
     //游戏界面
     board = initBoard();
     //注册键盘事件
     controller();
-})
+});
 
 function resetGlobal() {
     curBlock = null;
@@ -142,3 +153,41 @@ function resetGlobal() {
     saveBlock = null;
 }
 
+//适应屏幕大小
+function adaptAllSize() {
+    let width = Math.max(500, $(window).width());
+    let height = Math.max(700, $(window).height());
+
+    let selector = $('#screen');
+    adaptActive(selector, 9, 14, width, height);
+    selector = $('#game');
+    adaptActive(selector, 9, 14,
+        parseInt(selector.parent().css('width')),
+        parseInt(selector.parent().css('height')));
+    $('#navigation').css("width", selector.css("width"));
+
+    SIDELEN = Math.min(parseInt(selector.css('width')) / COLS,
+        parseInt(selector.css('height')) / ROWS);
+    SIDELEN = parseInt(SIDELEN);
+    OFFSETX = (parseInt(selector.css('width')) - SIDELEN * COLS) / 2;
+    OFFSETX = parseInt(OFFSETX);
+    OFFSETY = (parseInt(selector.css('height')) - SIDELEN * ROWS);
+    OFFSETY = parseInt(OFFSETY);
+    if (OFFSETY > OFFSETX)
+        OFFSETY -= OFFSETX;
+    console.log(SIDELEN + ' ' + OFFSETX + ' ' + OFFSETY);
+
+    let lineHeight = parseInt(selector.css('height')) / 8;
+    $('#game>.firstWord, #game>.secondWord').css({
+        'width': selector.css('width'), 'height': selector.css('height'),
+        'font-size': parseInt(lineHeight / 2)
+    });
+
+    // adaptActive($('#recordList'), 3, 5, selector.css('width'), selector.css('height'));
+
+    selector = $('#navigation>div, #navigation>div>div');
+    selector.css("line-height", selector.css('height'));
+    selector.css("font-size", parseInt(selector.css('height')) / 2);
+
+
+}

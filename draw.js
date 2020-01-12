@@ -1,3 +1,43 @@
+//计算适当大小
+function adaptCal(radioX, radioY, maxX, maxY) {
+    //假设Y满足条件
+    let y = maxY;
+    let x = parseInt(maxY * radioX / radioY);
+    //如果Y方向不满足
+    if (x > maxX) {
+        x = maxX;
+        y = parseInt(maxX * radioY / radioX);
+    }
+
+    let result = {};
+    result['width'] = x;
+    result['height'] = y;
+    result['offsetX'] = parseInt((maxX - x) / 2);
+    result['offsetY'] = parseInt((maxY - y) / 2);
+    return result;
+}
+
+//x--width, y--height
+function adaptActive(selector, radioX, radioY, maxX, maxY) {
+    let size = adaptCal(radioX, radioY,
+        maxX - parseInt(selector.css('margin-left')) - parseInt(selector.css('margin-right')),
+        maxY - parseInt(selector.css('margin-top')) -  parseInt(selector.css('margin-bottom')));
+    // console.log(size);
+    // console.log('left ' + selector.css('margin-left'));
+    // console.log('right ' +  selector.css('margin-right'));
+    // console.log('top ' + selector.css('margin-top'));
+    // console.log('bottom ' + selector.css('margin-bottom'));
+    let style = {
+        'width': size['width'],
+        'height': size['height'],
+        'left': size['offsetX'],
+        'top': size['offsetY'],
+        'position': 'absolute'
+    };
+    console.log(style);
+    selector.css(style);
+}
+
 //画板
 function drawBoard(selector, blockStr, style, offsetX, offsetY, rows, cols, sideLength, borderWidth, num = 0) {
     let board = [];
@@ -35,7 +75,7 @@ function initBoard() {
         'display': 'none',
         'opacity': '0.8'
     };
-    return drawBoard($('#game'), 'board', style, -1, 4, ROWS, COLS,
+    return drawBoard($('#game'), 'board', style, OFFSETX, OFFSETY, ROWS, COLS,
                      SIDELEN, BORDERWID);
 }
 

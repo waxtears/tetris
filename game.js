@@ -117,7 +117,7 @@ function gameMain(speed) {
             clearInterval(screenAlarm);
             //$('#game').prepend('游戏结束');
             $('#game>.secondWord').text('游戏结束');
-            showSubmit($('#record>.secondWord>span').text())
+            showSubmit($('#record>.secondWord>span').text());
             $('#begin>.secondWord').text('回到首页');
         }
 

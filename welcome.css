@@ -1,17 +1,12 @@
-body {background-color: #cccccc}
-#screen {width: 600px; height: 800px; margin: 50px auto; background-color: gray;}
+body {background-color: #cccccc; margin: 0; padding: 0;}
+#screen {margin: 50px auto; background-color: gray; z-index: 0;}
 
 /*屏幕*/
-#navigation {width: 546px; height: 50px; margin: auto; background-color: #dddddd;}
-/*#game {width: 546px; height: 720px; margin: auto; background-color: white; text-align: center;*/
-/*       font-size: 50px; line-height: 180px; position: relative; z-index: 0;}*/
-#game {width: 546px; height: 720px; margin: 1px auto; background-color: white; text-align: center;
-       padding-top: 40px; font-size: 40px; line-height: 90px; position: relative; z-index: 0;
-       box-sizing: border-box;}
+#navigation {height: 50px; margin: auto; background-color: #dddddd;}
+#game {margin: 51px 5px 30px 5px; background-color: white; position: relative; z-index: 1;}
 
 /*导航栏*/
-#navigation > div {float: left; width: 125px; height: 100%; margin: 0 25px; line-height: 50px;
-    font-size: 30px; z-index: 1;}
+#navigation > div {float: left; width: 33%; height: 100%; z-index: 2; text-align: center;}
 #begin {cursor: pointer;}
 #record {cursor: pointer;}
 #set {position: relative;}
@@ -47,9 +42,11 @@ body {background-color: #cccccc}
 #list {font-size: 30px;}
 
 /*游戏部分*/
-#game > .secondWord {color: red;}
+#game>.firstWord, #game>.secondWord {position: absolute; top: 0; left: 0; text-align: center;}
+#game>.secondWord {color: red;}
 /*公共部分*/
 .fontBold {font-weight: bold;}
+.firstWord {display: none;}
 .secondWord {display: none;}
 #background {display: none; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
     opacity: 0.2; background-color: black; z-index: 10;}
