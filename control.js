@@ -103,15 +103,12 @@ function down(block, board) {
     return moveBlock(getBlock(block.type, block.status, temp[1].x, temp[1].y), 0, 1);
 }
 
-function controller() {
+function controllerPC() {
     $(document).keydown(function (event) {
-        if (gameStatus !== 'begin')
-            return;
+        if (gameStatus !== 'begin') return;
         // console.log(event.key);
-        if (!event)
-            return;
-        if (moveAlarm)
-            return;
+        if (!event) return;
+        if (moveAlarm) return;
         switch (event.key) {
             case 'ArrowUp':
                 curBlock = rotateBlock(curBlock);
@@ -144,10 +141,8 @@ function controller() {
     });
     $(document).keyup(function (event) {
         //console.log(event.key);
-        if (gameStatus !== 'begin')
-            return;
-        if (!event)
-            return;
+        if (gameStatus !== 'begin') return;
+        if (!event) return;
         switch (event.key) {
             case 'ArrowDown':
             case 'ArrowLeft':
@@ -160,3 +155,100 @@ function controller() {
     });
 }
 
+//移动端判断方向
+function getDirention(start, end, flex) {
+    // console.log('x = ' + Math.abs(start.x - end.x));
+    // console.log('y = ' + Math.abs(start.y - end.y));
+    if (Math.abs(start.x - end.x) <= flex && Math.abs(start.y - end.y) <= flex)
+        return 0;
+    if (Math.abs(start.x - end.x) > Math.abs(start.y - end.y)) {
+        if (end.x > start.x)
+            return RIGHT;
+        else
+            return LEFT;
+    } else {
+        if (end.y > start.y)
+            return DOWN;
+        else
+            return UP;
+    }
+}
+
+//获取长度
+function getDistance(start, end) {
+    return Math.sqrt(Math.pow(Math.abs(start.x - end.x), 2) + Math.pow(Math.abs(start.y - end.y), 2));
+}
+
+function controllerMove() {
+    let pos = {}, posStart = {}, posEnd = {};
+    //移动端
+    document.addEventListener('touchstart', function (event) {
+        if (gameStatus !== 'begin') return;
+        if (!event) return;
+        // console.log(event);
+        pos['x'] = event.targetTouches[0].pageX;
+        pos['y'] = event.targetTouches[0].pageY;
+        posStart['x'] = event.targetTouches[0].pageX;
+        posStart['y'] = event.targetTouches[0].pageY;
+    }, false);
+    document.addEventListener('touchmove', function (event) {
+        if (gameStatus !== 'begin') return;
+        if (!event) return;
+        // console.log(event);
+        //当屏幕有多个touch或者页面被缩放过，就不执行move操作
+        if(event.targetTouches.length > 1 || event.scale && event.scale !== 1) return;
+        posEnd['x'] = event.targetTouches[0].pageX;
+        posEnd['y'] = event.targetTouches[0].pageY;
+        let direction = getDirention(posStart, posEnd, 5);
+        let distance = getDistance(posStart, posEnd);
+        if (distance < 50) return;
+        switch (direction) {
+            case DOWN:
+                // curBlock = moveBlock(curBlock, 0, 1);
+                // canDonw = false;
+                // setTimeout(function () {
+                //     canDown = true;
+                // },500);
+                break;
+            case LEFT:
+                curBlock = moveBlock(curBlock, -1, 0);
+                break;
+            case RIGHT:
+                curBlock = moveBlock(curBlock, 1, 0);
+                break;
+        }
+        if (direction === DOWN || direction === LEFT || direction === RIGHT) {
+            posStart['x'] = posEnd['x'];
+            posStart['y'] = posEnd['y'];
+        }
+    }, false);
+    document.addEventListener('touchend', function (event) {
+        if (gameStatus !== 'begin') return;
+        if (!event) return;
+        posEnd['x'] = event.changedTouches[0].pageX;
+        posEnd['y'] = event.changedTouches[0].pageY;
+        let direction = getDirention(pos, posEnd, 5);
+        let distance = getDistance(pos, posEnd);
+        // console.log('direction = ' + direction);
+        // console.log('distance = ' + distance);
+        switch (direction) {
+            case 0:
+                curBlock = saveABlock(curBlock);
+                break;
+            case UP:
+                if (distance >= 30) {
+                    curBlock = rotateBlock(curBlock);
+                }
+                break;
+            case DOWN:
+                if (distance >= 100) {
+                    curBlock = down(curBlock, board);
+                    canDonw = false;
+                    setTimeout(function () {
+                        canDown = true;
+                    },500);
+                }
+                break;
+        }
+    }, false);
+}

@@ -1,22 +1,42 @@
 //初始化全局变量
+var UP = 1;
+var DOWN = 2;
+var LEFT = 3;
+var RIGHT = 4;
 var OFFSETX = 0;
 var OFFSETY = 0;
 var SIDELEN = 0;
 var BORDERWID = 1;
 var COLS = 13;
 var ROWS = 20;
+var scoreList = [0, 1, 3, 6, 10];
 var board = null;
+var saveBoard = null;
+
+//重开后需要重置的全局变量
 var curBlock = null;
 var gameStatus = 'wait';
 var score = 0;
-var scoreList = [0, 1, 3, 6, 10];
 var blockAlarm = null;
 var screenAlarm = null;
 var moveAlarm = null;
 var celebAlarm = null;
 var comb = {'level':null, 'alarm': null};
 var saveBlock = null;
-var saveBoard = null;
+var canDown = true;
+
+function resetGlobal() {
+    curBlock = null;
+    gameStatus = 'wait';
+    score = 0;
+    blockAlarm = null;
+    screenAlarm = null;
+    moveAlarm = null;
+    celebAlarm = null;
+    comb = {'level':null, 'alarm': null};
+    saveBlock = null;
+    canDown = true;
+}
 
 $(function () {
     adaptAllSize();
@@ -137,21 +157,9 @@ $(function () {
     //游戏界面
     board = initBoard();
     //注册键盘事件
-    controller();
+    controllerPC();
+    controllerMove();
 });
-
-function resetGlobal() {
-    curBlock = null;
-    gameStatus = 'wait';
-    score = 0;
-    scoreList = [0, 1, 3, 6, 10];
-    blockAlarm = null;
-    screenAlarm = null;
-    moveAlarm = null;
-    celebAlarm = null;
-    comb = {'level':null, 'alarm': null};
-    saveBlock = null;
-}
 
 //适应屏幕大小
 function adaptAllSize() {
