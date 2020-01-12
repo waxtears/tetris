@@ -1,37 +1,60 @@
-//将方块填充到游戏屏幕中
-function initBoard(offsetX, offsetY, X, Y, outLength, borderWidth) {
+//画板
+function drawBoard(selector, blockStr, style, offsetX, offsetY, rows, cols, sideLength, borderWidth, num = 0) {
     let board = [];
+
     let index = 0;
-    for (let x = 0; x < X; ++x) {
+    for (let x = 0; x < cols; ++x) {
         board[x] = [];
-        for (let y = 0; y < Y; ++y) {
+        for (let y = 0; y < rows; ++y) {
             board[x][y] = {};
-            board[x][y]['x'] = offsetX + x * outLength;
-            board[x][y]['y'] = offsetY + y * outLength;
-            board[x][y]['id'] = index;
-            board[x][y]['ok'] = 0; //0无，1预判，2方块（活跃的），3落地的（稳定的）
-            let htmlStr = '<div id="block' + board[x][y].id + '"></div>';
-            //console.log(htmlStr);
-            $('#game').append(htmlStr);
-            let style = {'position': 'absolute', 'left': board[x][y].x + 'px', 'top': board[x][y].y + 'px',
-                         'background-color': 'black', 'width': outLength, 'height': outLength,
-                         'border': borderWidth + 'px solid white', 'box-sizing': 'border-box',
-                         'display': 'block', 'opacity': '0.8'};
-            //console.log(style);
-            let seletor = $('#block' + board[x][y].id);
-            seletor.css(style);
-            seletor.hide();
+            board[x][y]['x'] = offsetX + x * sideLength;
+            board[x][y]['y'] = offsetY + y * sideLength;
+            board[x][y]['ok'] = num; //0无，1预判，2方块（活跃的），3落地的（稳定的）
+            board[x][y]['id'] = blockStr + index;
+            let htmlStr = '<div id="' + board[x][y].id + '"></div>';
+            selector.append(htmlStr);
+            style['position'] = 'absolute';
+            style['left'] = board[x][y].x + 'px';
+            style['top'] = board[x][y].y + 'px';
+            style['width'] = sideLength;
+            style['height'] = sideLength;
+            style['border'] = borderWidth + 'px solid white';
+            style['box-sizing'] = 'border';
+            $('#' + board[x][y].id).css(style);
             ++index;
         }
     }
+
     return board;
+}
+
+//初始化游戏白板
+function initBoard() {
+    let style = {
+        'background-color': 'black',
+        'display': 'none',
+        'opacity': '0.8'
+    };
+    return drawBoard($('#game'), 'board', style, -1, 4, ROWS, COLS,
+                     SIDELEN, BORDERWID);
+}
+
+//初始化存储块
+function initSaveBoard() {
+    let style = {
+        'background-color': 'black',
+        'display': 'none',
+        'opacity': '0.3'
+    };
+    return drawBoard($('#set>.secondWord'), 'saveBoard', style, 1, 1,
+                     4, 4, 12, 1);
 }
 
 //画出当前的所有方块
 function drawBlocks(board) {
     for (blockRow of board) {
         for (block of blockRow) {
-            let selector = $('#block' + block.id);
+            let selector = $('#' + block.id);
             if (block.ok >= 2) {
                 selector.css('background-color','black');
                 selector.show();

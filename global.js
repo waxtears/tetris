@@ -14,6 +14,7 @@ var moveAlarm = null;
 var celebAlarm = null;
 var comb = {'level':null, 'alarm': null};
 var saveBlock = null;
+var saveBoard = null;
 
 $(function () {
     //导航栏
@@ -123,7 +124,7 @@ $(function () {
         $(this).siblings('i').text(i);
     });
     //游戏界面
-    board = initBoard(0, 6, COLS, ROWS, SIDELEN, BORDERWID);
+    board = initBoard();
     //注册键盘事件
     controller();
 })

@@ -4,7 +4,7 @@ body {background-color: #cccccc}
 /*屏幕*/
 #navigation {width: 546px; height: 50px; margin: auto; background-color: #dddddd;}
 #game {width: 546px; height: 720px; margin: auto; background-color: white; text-align: center;
-    font-size: 50px; line-height: 720px; position: relative; z-index: 0;}
+       font-size: 50px; line-height: 720px; position: relative; z-index: 0;}
 
 /*导航栏*/
 #navigation > div {float: left; width: 125px; height: 100%; margin: 0 25px; line-height: 50px;

@@ -1,4 +1,5 @@
 //检查是否可以控制界面
+
 function checkControl() {
     return gameStatus === 'begin' && curBlock != null;
 }
@@ -55,6 +56,24 @@ function moveBlock(block, x, y) {
     return getBlock(randnum(0, 7), 0, 7, 1);
 }
 
+//存储或交换取出一个方块
+function saveABlock(block) {
+    if (saveBlock === null) {
+        saveBlock = getBlock(block.type, block.status, 1, 1);
+        return getBlock(randnum(0,7), 0, 7, 1);
+    }
+
+    let temp = adaptBorder(getBlock(saveBlock.type, saveBlock.status, block.blocks[1].x, block.blocks[1].y));
+    if (!temp)
+        return block;
+
+    if (touchLand(temp.blocks, board, ROWS))
+        return block;
+
+    saveBlock = getBlock(block.type, block.status, 1, 1);
+    return temp;
+}
+
 //预判阴影部分
 function previewBlock(blocks, board) {
     let temp = [];
@@ -88,7 +107,7 @@ function controller() {
     $(document).keydown(function (event) {
         if (gameStatus !== 'begin')
             return;
-        //console.log(event.key);
+        // console.log(event.key);
         if (!event)
             return;
         if (moveAlarm)
@@ -117,6 +136,9 @@ function controller() {
                 break;
             case ' ':
                 curBlock = down(curBlock, board);
+                break;
+            case 'z':
+                curBlock = saveABlock(curBlock);
                 break;
         }
     });

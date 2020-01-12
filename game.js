@@ -90,34 +90,14 @@ function calculateComb(comb) {
     }, time, comb);
 }
 
-//存储或交换取出一个方块
-function saveABlock(Block) {
-    if (saveBlock === null) {
-        saveBlock = block;
-        return getBlock(randnum(0,7), 0, 7, 1);
-    }
-    let temp = getBlock(saveBlock.type, saveBlock.status, block.blocks.x[1], block.blocks.y[1]);
-    saveBlock = block;
-    return temp;
-}
-
 //游戏主函数
 function gameMain(speed) {
 
-    //接触绑定时间
-    // let selector = $('#record');
-    // selector.html('score: 0');
-    // selector.unbind();
-    // selector = $('#set');
-    // selector.html('');
-    // selector.unbind();
-    // selector = $('#begin');
-    // selector.html('暂停游戏');
-    // selector.unbind();
-
     //生产第一个block
-    if (gameStatus === 'wait')
+    if (gameStatus === 'wait') {
+        saveBoard = initSaveBoard();
         curBlock = getBlock(randnum(0, 7), 0, 7, 1);
+    }
 
     gameStatus = 'begin';
 
@@ -130,7 +110,8 @@ function gameMain(speed) {
             gameStatus = 'over';
         }
     }, 1500 / speed);
-    //定时block向下移动
+
+    //定时刷新屏幕
     screenAlarm = setInterval(function () {
         if (gameStatus === 'over') {
             clearInterval(screenAlarm);
@@ -139,13 +120,18 @@ function gameMain(speed) {
             showSubmit($('#record>.secondWord>span').text())
             $('#begin>.secondWord').text('回到首页');
         }
+
         clearBoard(board, 2);
-        //console.log(curBlock);
         setBlock(previewBlock(curBlock['blocks'], board), board, 1);
-        //console.log(curBlock.blocks);
         setBlock(curBlock['blocks'], board, 2);
-        //setBlockOk(accBlocks, board);
         drawBlocks(board);
+
+        clearBoard(saveBoard, 1);
+        if (saveBlock) {
+           setBlock(saveBlock['blocks'], saveBoard, 1);
+        }
+        drawBlocks(saveBoard);
+
     }, 100);
 }
 
